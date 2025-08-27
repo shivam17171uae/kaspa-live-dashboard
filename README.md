@@ -2,8 +2,7 @@
 
 A full-stack, real-time dashboard for the Kaspa network, providing live market data, on-chain statistics, and a wallet inspection tool. The entire application is containerized with Docker for easy, one-command setup and portability.
 
-![Kaspa Live Dashboard Screenshot](https-github-com-shivam-kaspa-live-dashboard-blob-main-screenshot-png) 
-*(**Action Required:** Replace this with a link to a screenshot of your running dashboard!)*
+<img width="2810" height="1907" alt="Screenshot 2025-08-27 151905" src="https://github.com/user-attachments/assets/b9e5385e-45d1-49eb-86b0-5541d61a1c06" />
 
 ---
 
