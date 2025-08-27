@@ -6,6 +6,16 @@
     <title>Kaspa Live Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<!-- ADD THIS MODAL HTML before the </body> tag in index.html -->
+<div id="details-modal" class="modal-backdrop">
+    <div class="modal-content">
+        <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+        <h2>Block Details</h2>
+        <div id="modal-body">
+            <!-- Details will be loaded here by JavaScript -->
+        </div>
+    </div>
+</div>
 <body class="dark-mode">
     <div class="main-grid">
         <header class="header">
@@ -56,6 +66,12 @@
             <button id="getBalanceBtn">Get Address Info</button>
             <div class="loader" id="address-loader"></div>
             <div id="address-results-container"></div>
+                <div id="transactions-container"></div>
+                <div id="pagination-controls" class="pagination-controls">
+                    <button id="prev-page-btn" disabled>&laquo; Previous</button>
+                    <span id="page-indicator"></span>
+                    <button id="next-page-btn" disabled>Next &raquo;</button>
+                </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

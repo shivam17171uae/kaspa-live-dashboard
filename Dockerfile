@@ -1,4 +1,4 @@
-# Dockerfile
+# Dockerfile - CORRECTED VERSION
 # Use an official Node.js runtime as the base image
 FROM node:18-alpine AS builder
 
@@ -11,12 +11,6 @@ COPY package*.json ./
 # Install project dependencies
 RUN npm install
 
-# Copy prisma schema
-COPY ./prisma ./prisma/
-
-# Generate the Prisma client
-RUN npx prisma generate
-
 # Copy the rest of the application source code
 COPY . .
 
@@ -24,10 +18,8 @@ COPY . .
 FROM node:18-alpine
 WORKDIR /usr/src/app
 
-# Copy dependencies and prisma client from the builder stage
+# Copy dependencies from the builder stage
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/prisma ./prisma
-COPY --from=builder /usr/src/app/node_modules/.prisma ./node_modules/.prisma
 
 # Copy application code
 COPY . .
