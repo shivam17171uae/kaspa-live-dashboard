@@ -1,0 +1,22 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Transaction {
+  id              String   @id @unique // The transaction ID
+  address         String   // The address this transaction is associated with
+  amount          BigInt   // The amount of the transaction in Sompi
+  direction       String   // "INCOMING" or "OUTGOING"
+  blockDaaScore   BigInt
+  createdAt       DateTime @default(now())
+
+  @@index([address]) // Add an index to the address column for fast lookups
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaspa Live Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+    <div class="main-grid">
+        <header class="header">
+            <h1>Kaspa Live Dashboard</h1>
+            <p>Powered by Your Local Node</p>
+        </header>
+
+        <!-- KAS Market Stats Panel -->
+        <div class="feature-container market-stats-panel">
+            <h2>KAS Market Stats <small>(from CoinGecko)</small></h2>
+            <div class="stats-grid market-stats-grid">
+                <div class="stat-item"><strong>Price (USD)</strong><span id="stat-price">Loading...</span></div>
+                <div class="stat-item"><strong>24h Change</strong><span id="stat-price-change">Loading...</span></div>
+                <div class="stat-item"><strong>Market Cap</strong><span id="stat-market-cap">Loading...</span></div>
+                <div class="stat-item"><strong>24h Volume</strong><span id="stat-volume">Loading...</span></div>
+            </div>
+        </div>
+
+        <!-- Network Stats Panel -->
+        <div class="feature-container stats-panel">
+            <h2>Network Stats <small>(from Your Node)</small></h2>
+            <div class="stats-grid">
+                <div class="stat-item"><strong>DAA Score</strong><span id="stat-daa-score">Loading...</span></div>
+                <div class="stat-item"><strong>Hashrate</strong><span id="stat-hashrate">Loading...</span></div>
+                <div class="stat-item"><strong>Circulating Supply</strong><span id="stat-supply">Loading...</span></div>
+                <div class="stat-item"><strong>Blocks Per Second</strong><span id="stat-bps">0.0</span></div>
+                <div class="stat-item"><strong>Transactions Per Second</strong><span id="stat-tps">0.0</span></div>
+                <div class="stat-item"><strong>Live Peers</strong><span id="stat-peers">Loading...</span></div>
+            </div>
+        </div>
+
+        <!-- Live Chart Panel -->
+        <div class="feature-container chart-panel">
+            <h2>Live Network Throughput (TPS/BPS)</h2>
+            <div class="chart-container"><canvas id="tpsBpsChart"></canvas></div>
+        </div>
+        
+        <!-- Live Block Feed -->
+        <div class="feature-container live-feed-panel">
+            <h2>Live Block Feed <span id="ws-status" class="status-disconnected" title="Disconnected">●</span></h2>
+            <div class="block-feed" id="block-feed-container"></div>
+        </div>
+
+        <!-- Wallet Address Checker -->
+        <div class="feature-container wallet-panel">
+            <h2>Wallet Address Checker</h2>
+            <input type="text" id="kaspaAddress" placeholder="Enter Kaspa Address">
+            <button id="getBalanceBtn">Get Address Info</button>
+            <div class="loader" id="address-loader"></div>
+            <div id="address-results-container"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
