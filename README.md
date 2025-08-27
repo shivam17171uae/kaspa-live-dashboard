@@ -71,3 +71,5 @@ The backend code has been refactored into a modular structure for better maintai
 -   **`/src/`**: Contains all frontend files (`index.html`, `script.js`, `style.css`).
 
 This structure separates concerns, making it easier to add new features or debug existing ones.
+
+special thanks to kaspa.org for api :- https://api.kaspa.org/
