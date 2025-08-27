@@ -43,3 +43,58 @@ You must have the following software installed on your computer:
 ```bash
 git clone https://github.com/your-username/kaspa-live-dashboard.git
 cd kaspa-live-dashboard
+
+Step 2: Start Your Local Kaspa Node
+Open a separate, dedicated terminal for your Kaspa node. Navigate to the folder containing your kaspad.exe file and run the following command.
+The --utxoindex flag is required for the wallet checker to function. The --rpclisten=0.0.0.0 flag is essential to allow the Docker containers to connect to your node.
+
+.\kaspad.exe --utxoindex --rpcmaxclients=250 --rpclisten=0.0.0.0
+
+Leave this terminal running. It is the data source for the entire dashboard.
+Step 3: Build and Launch the Docker Application
+In your project terminal (kaspa-live-dashboard), run this command to build the application images and start all the containers.
+
+code
+
+docker-compose up --build -d
+Step 4: One-Time Database Setup
+The very first time you launch the application, you must create the tables in the database. Run this command in your project terminal:
+code
+
+docker-compose exec backend npx prisma db push
+You will only need to do this once. The database will be persistent in a Docker volume for all future runs.
+
+Step 5: Access the Dashboard
+
+Open your web browser and go to: http://localhost:8085
+The dashboard will be fully functional as soon as your local Kaspa node is synced with the network.
+Common Commands
+
+Start the application (after initial setup):
+
+code
+
+docker-compose up -d
+
+Stop the application:
+
+code
+
+docker-compose down
+
+View logs for all services:
+
+code
+
+docker-compose logs -f
+
+View logs for the backend:
+code
+
+docker-compose logs -f backend
+
+Clean up all unused Docker resources:
+
+code
+
+docker system prune
