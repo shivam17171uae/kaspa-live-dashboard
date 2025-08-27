@@ -2,7 +2,8 @@
 
 A real-time dashboard for monitoring the Kaspa network, powered by a direct connection to your own local Kaspa node. This dashboard provides live network statistics, a streaming block feed, and a wallet checker to view balances and transaction histories.
 
-![Dashboard Screenshot](https://i.imgur.com/your-screenshot-url.png) <!-- It's highly recommended to take a new screenshot of your awesome UI and upload it to a site like Imgur, then replace this URL! -->
+<img width="2714" height="1917" alt="Screenshot 2025-08-27 215151" src="https://github.com/user-attachments/assets/19ae9a17-a6eb-4b2c-9a30-4faee642b8f1" />
+
 
 ## Features
 
