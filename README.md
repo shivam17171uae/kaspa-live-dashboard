@@ -1,109 +1,72 @@
 # Kaspa Live Dashboard
 
-A full-stack, real-time dashboard for the Kaspa network, providing live market data, on-chain statistics, and a wallet inspection tool. The application stack is containerized with Docker for easy setup and connects to a locally running Kaspa node.
+A real-time dashboard for monitoring the Kaspa network, powered by a direct connection to your own local Kaspa node. This dashboard provides live network statistics, a streaming block feed, and a wallet checker to view balances and transaction histories.
 
-<img width="2810" height="1907" alt="Screenshot 2025-08-27 151905" src="https://github.com/user-attachments/assets/79774eff-a968-4ab7-906e-080368541312" />
-
-
----
+![Dashboard Screenshot](https://i.imgur.com/your-screenshot-url.png) <!-- It's highly recommended to take a new screenshot of your awesome UI and upload it to a site like Imgur, then replace this URL! -->
 
 ## Features
 
--   **Live Market Stats:** Fetches and displays real-time KAS price, 24h change, market cap, and volume from the CoinGecko API.
--   **Live Network Stats:** Connects directly to your local Kaspa node to show the current DAA score, network hashrate, circulating supply, and live peer count.
--   **Real-Time Throughput:** A dynamic chart that visualizes the network's Blocks Per Second (BPS) and Transactions Per Second (TPS).
--   **Live Block Feed:** Uses a WebSocket to display new blocks the moment they are found by the node.
--   **Wallet Address Checker:** Allows you to query any Kaspa address to see its current balance and a list of recent incoming transactions.
+-   **Live Network Stats:** Monitors DAA Score, Hashrate, Circulating Supply, and Peer Count in real-time.
+-   **Live Throughput Chart:** Visualizes Blocks Per Second (BPS) and Transactions Per Second (TPS).
+-   **Streaming Block Feed:** Displays new blocks as they are discovered by your node, with clickable links to view block details.
+-   **Wallet Address Checker:** Look up any Kaspa address to see its current balance and a paginated list of its transaction history (both sent and received).
+-   **Market Stats:** Fetches current KAS price, 24h change, market cap, and volume from CoinGecko.
 
-## Technical Architecture
+## Prerequisites
 
--   **Frontend:** A responsive single-page application built with vanilla HTML, CSS, and JavaScript (using Chart.js). Served by an **Nginx** container.
--   **Backend:** A **Node.js** and **Express** API that communicates with the local Kaspa node via gRPC and serves data to the frontend.
--   **Indexer:** A separate **Node.js** script that listens for new blocks and saves all incoming transactions to the database for fast lookups.
--   **Database:** A **PostgreSQL** database, managed by the **Prisma ORM**, to store transaction data.
--   **Containerization:** The application stack (backend, frontend, database, indexer) is managed by **Docker** and **Docker Compose**.
--   **Data Source:** Connects to a `kaspad` process running on the host machine.
+-   **A running `kaspad` node:** This dashboard requires a connection to a local Kaspa node. Ensure it is running and accessible.
+-   **Docker and Docker Compose:** The application is containerized for easy setup and deployment.
 
----
+## How to Run
 
-## Getting Started
+This project is designed to be run with Docker Compose, which handles both the backend API and the frontend service.
 
-Follow these instructions to get the dashboard running on your local machine.
+#### 1. Configure the Environment
 
-### Prerequisites
+First, create a `.env` file in the root of the project directory. This file will store the connection details for your Kaspa node.
 
-You must have the following software installed on your computer:
--   [Git](https://git-scm.com/downloads)
--   [Docker Desktop](https://www.docker.com/products/docker-desktop/)
--   A **Kaspa Full Node** (`kaspad`) executable. You can download the latest official release from the [Kaspa GitHub Releases Page](https://github.com/kaspanet/kaspad/releases).
-
-### How to Run the Application
-
-**Step 1: Clone the Repository**
-```bash
-git clone https://github.com/your-username/kaspa-live-dashboard.git
-cd kaspa-live-dashboard
+```
+# .env
+KASPAD_HOST=host.docker.internal:16110
 ```
 
-**Step 2: Start Your Local Kaspa Node**
+_Note: `host.docker.internal` is a special DNS name that allows the Docker container to connect to services running on your host machine._
 
-Open a separate, dedicated terminal for your Kaspa node. Navigate to the folder containing your `kaspad.exe` file and run the following command.
+#### 2. Build and Run the Containers
 
-The `--utxoindex` flag is required for the wallet checker to function. The `--rpclisten=0.0.0.0` flag is essential to allow the Docker containers to connect to your node.
-
-```powershell
-.\kaspad.exe --utxoindex --rpcmaxclients=250 --rpclisten=0.0.0.0
-```
-**Leave this terminal running.** It is the data source for the entire dashboard.
-
-**Step 3: Build and Launch the Docker Application**
-
-In your **project terminal** (`kaspa-live-dashboard`), run this command to build the application images and start all the containers.
+Open your terminal in the project's root directory and run the following command:
 
 ```bash
 docker-compose up --build -d
 ```
 
-**Step 4: One-Time Database Setup**
+-   `--build` tells Docker Compose to rebuild the images if there are any changes (like in the Dockerfile).
+-   `-d` runs the containers in detached mode, so they run in the background.
 
-The very first time you launch the application, you must create the tables in the database. Run this command in your project terminal:
+#### 3. Access the Dashboard
 
-```bash
-docker-compose exec backend npx prisma db push
-```
-You will only need to do this once. The database will be persistent in a Docker volume for all future runs.
+Once the containers are running, you can access the Kaspa Live Dashboard in your web browser at:
 
-**Step 5: Access the Dashboard**
+**[http://localhost:8085](http://localhost:8085)**
 
-Open your web browser and go to: **`http://localhost:8085`**
+_(The port `8085` is defined in the `docker-compose.yml` file for the frontend service.)_
 
-The dashboard will be fully functional as soon as your local Kaspa node is synced with the network.
+#### 4. To Stop the Application
 
----
+To stop the containers, run:
 
-### Common Commands
-
-**Start the application (after initial setup):**
-```bash
-docker-compose up -d
-```
-
-**Stop the application:**
 ```bash
 docker-compose down
 ```
 
-**View logs for all services:**
-```bash
-docker-compose logs -f
-```
+## Project Structure
 
-**View logs for the backend:**
-```bash
-docker-compose logs -f backend
-```
+The backend code has been refactored into a modular structure for better maintainability and scalability.
 
-**Clean up all unused Docker resources:**
-```bash
-docker system prune
-```
+-   **`server.js`**: The main entry point for the backend application. It initializes the Express server, connects the routes, and starts the WebSocket service.
+-   **`/routes/api.js`**: Defines all the HTTP API endpoints (e.g., `/api/address/:address`, `/api/market-stats`).
+-   **`/services/kaspa-node.js`**: Manages the gRPC client and connection to the `kaspad` node. All direct node communication logic resides here.
+-   **`/services/websocket.js`**: Manages the WebSocket server, including broadcasting new block notifications to all connected clients.
+-   **`/src/`**: Contains all frontend files (`index.html`, `script.js`, `style.css`).
+
+This structure separates concerns, making it easier to add new features or debug existing ones.
